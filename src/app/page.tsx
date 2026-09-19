@@ -4,6 +4,7 @@ import { useState } from "react";
 import { WalmartLogo, ShvLogo } from "@/components/Logos";
 import { LoadsTable } from "@/components/LoadsTable";
 import { SummaryBanner } from "@/components/SummaryBanner";
+import { RulesPanel } from "@/components/RulesPanel";
 import { CANDIDATE_EMAIL } from "@/lib/config";
 import type { PushResultRow, SanitizedRow } from "@/lib/types";
 
@@ -93,6 +94,8 @@ export default function Home() {
       </header>
 
       <p className="subtitle">Walmart Freight Tenders → SHV TMS Load Builder</p>
+
+      <RulesPanel />
 
       <div className="email-row">
         <label>Account email (hardcoded)</label>

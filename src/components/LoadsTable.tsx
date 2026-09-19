@@ -70,10 +70,22 @@ export function LoadsTable({ rows, selected, onToggle, results }: Props) {
                 <td>
                   {row.raw.dest_city}, {row.raw.dest_st}
                 </td>
-                <td>{row.shvLoad?.ship_date ?? row.raw.shp_dt}</td>
-                <td>{row.shvLoad?.delivery_date ?? row.raw.del_dt}</td>
-                <td>{row.shvLoad?.weight ?? row.raw.wgt ?? "—"}</td>
-                <td>{row.shvLoad?.equipment_type ?? "—"}</td>
+                <td>
+                  {row.shvLoad?.ship_date ?? "—"}
+                  {row.shvLoad && <div className="raw-sub">was {row.raw.shp_dt}</div>}
+                </td>
+                <td>
+                  {row.shvLoad?.delivery_date ?? "—"}
+                  {row.shvLoad && <div className="raw-sub">was {row.raw.del_dt}</div>}
+                </td>
+                <td>
+                  {row.shvLoad?.weight ?? "—"}
+                  {row.shvLoad && <div className="raw-sub">was {row.raw.wgt ?? "null"}</div>}
+                </td>
+                <td>
+                  {row.shvLoad?.equipment_type ?? "—"}
+                  <div className="raw-sub">mode: {row.raw.mode || "—"}</div>
+                </td>
                 <td>
                   <StatusBadge row={row} result={result} />
                 </td>
