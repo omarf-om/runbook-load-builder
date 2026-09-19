@@ -6,8 +6,8 @@ interface Props {
   summary: { accepted: number; rejected: number; skippedManualReview: number } | null;
 }
 
-function shipperFor(rows: SanitizedRow[], loadNumber: string): string {
-  return rows.find((r) => r.loadNumber === loadNumber)?.raw.shipper_nm ?? "—";
+function rowFor(rows: SanitizedRow[], loadNumber: string): SanitizedRow | undefined {
+  return rows.find((r) => r.loadNumber === loadNumber);
 }
 
 function outcomeLabel(outcome: PushResultRow["outcome"]): { text: string; badgeClass: string } {
@@ -49,19 +49,31 @@ export function PushResultsPanel({ results, rows, summary }: Props) {
               <th>Load Number</th>
               <th>Result</th>
               <th>Detail</th>
+              <th>SHV Payload</th>
             </tr>
           </thead>
           <tbody>
             {pushed.map((r) => {
               const { text, badgeClass } = outcomeLabel(r.outcome);
+              const row = rowFor(rows, r.loadNumber);
               return (
                 <tr key={r.loadNumber}>
-                  <td>{shipperFor(rows, r.loadNumber)}</td>
+                  <td>{row?.raw.shipper_nm ?? "—"}</td>
                   <td>{r.loadNumber}</td>
                   <td>
                     <span className={`badge ${badgeClass}`}>{text}</span>
                   </td>
                   <td className="detail-cell">{r.errors?.join("; ") ?? ""}</td>
+                  <td>
+                    {row?.shvLoad ? (
+                      <details className="payload-dropdown">
+                        <summary>View payload</summary>
+                        <pre>{JSON.stringify(row.shvLoad, null, 2)}</pre>
+                      </details>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                 </tr>
               );
             })}

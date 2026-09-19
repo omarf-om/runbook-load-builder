@@ -31,7 +31,6 @@ export function LoadsTable({ rows, selected, onToggle }: Props) {
             <th>Mode</th>
             <th>Status</th>
             <th>Reason</th>
-            <th>SHV Payload</th>
           </tr>
         </thead>
         <tbody>
@@ -62,16 +61,6 @@ export function LoadsTable({ rows, selected, onToggle }: Props) {
                 <StatusBadge row={row} />
               </td>
               <td className="detail-cell">{row.status === "manual_review" ? row.reasons.join("; ") : ""}</td>
-              <td>
-                {row.shvLoad ? (
-                  <details className="payload-dropdown">
-                    <summary>View payload</summary>
-                    <pre>{JSON.stringify(row.shvLoad, null, 2)}</pre>
-                  </details>
-                ) : (
-                  "—"
-                )}
-              </td>
             </tr>
           ))}
         </tbody>
