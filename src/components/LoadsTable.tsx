@@ -7,11 +7,13 @@ interface Props {
 }
 
 function StatusBadge({ row }: { row: SanitizedRow }) {
-  return row.status === "ready" ? (
-    <span className="badge badge-success">✅ Ready</span>
-  ) : (
-    <span className="badge badge-warning">⚠️ Manual review</span>
-  );
+  if (row.status === "manual_review") {
+    return <span className="badge badge-warning">⚠️ Manual review</span>;
+  }
+  if (row.cautions.length > 0) {
+    return <span className="badge badge-caution">✅ Ready, should be checked</span>;
+  }
+  return <span className="badge badge-success">✅ Ready</span>;
 }
 
 export function LoadsTable({ rows, selected, onToggle }: Props) {
@@ -60,7 +62,9 @@ export function LoadsTable({ rows, selected, onToggle }: Props) {
               <td>
                 <StatusBadge row={row} />
               </td>
-              <td className="detail-cell">{row.status === "manual_review" ? row.reasons.join("; ") : ""}</td>
+              <td className="detail-cell">
+                {row.status === "manual_review" ? row.reasons.join("; ") : row.cautions.join("; ")}
+              </td>
             </tr>
           ))}
         </tbody>

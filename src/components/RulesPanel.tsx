@@ -73,6 +73,12 @@ export function RulesPanel() {
             malformed date. These loads can&apos;t form a valid SHV payload, so they&apos;re
             flagged with a reason instead of being sent.
           </p>
+          <p className="rules-note">
+            <strong>Flagged but still pushable:</strong> if a mode only fuzzy-matches a known
+            value (e.g. &quot;wmt freezer&quot; instead of &quot;FREEZER&quot;), the load stays
+            ready and selectable, but is marked &quot;should be checked&quot; since the extra
+            text isn&apos;t guaranteed to be harmless.
+          </p>
         </div>
       )}
     </div>

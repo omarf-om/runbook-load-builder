@@ -198,6 +198,12 @@ tr.row-review {
   color: #5a6472;
 }
 
+.badge-caution {
+  background: #fff4e0;
+  color: #93650a;
+  border: 1px solid #f3d8a4;
+}
+
 .payload-dropdown summary {
   cursor: pointer;
   color: var(--accent);

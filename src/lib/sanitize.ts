@@ -22,18 +22,27 @@ function parseWeight(wgt: string | null): number | null {
   return Math.round(n);
 }
 
+const KNOWN_MODES = ["AMBIENT", "REFRIGERATED", "FREEZER", "FRESH"];
+
 /**
  * Ambient -> Dry Van 53', Refrigerated/Freezer -> Reefer 53', anything else -> null (manual review).
  * Real tender data can include vendor-prefixed/padded codes (e.g. " wmt freezer "), so this
  * matches by keyword rather than exact equality. "Fresh" and unrecognized modes stay ambiguous
  * per the walkthrough — they need a temperature range from Walmart before a load can be built.
+ *
+ * `exact` reports whether the raw value matched a known mode word-for-word; a keyword match on
+ * a non-exact value (e.g. "wmt freezer") still resolves an equipment type, but is surfaced as a
+ * caution rather than pushed silently, since we can't be certain the extra text is harmless.
  */
-function mapEquipmentType(mode: string): EquipmentType | null {
+function mapEquipmentType(mode: string): { equipmentType: EquipmentType | null; exact: boolean } {
   const normalized = mode.trim().toUpperCase();
-  if (normalized.includes("FRESH")) return null;
-  if (normalized.includes("AMBIENT")) return "Dry Van 53'";
-  if (normalized.includes("REFRIGERATED") || normalized.includes("FREEZER")) return "Reefer 53'";
-  return null;
+  const exact = KNOWN_MODES.includes(normalized);
+  if (normalized.includes("FRESH")) return { equipmentType: null, exact };
+  if (normalized.includes("AMBIENT")) return { equipmentType: "Dry Van 53'", exact };
+  if (normalized.includes("REFRIGERATED") || normalized.includes("FREEZER")) {
+    return { equipmentType: "Reefer 53'", exact };
+  }
+  return { equipmentType: null, exact };
 }
 
 function trimField(value: string): string {
@@ -74,17 +83,24 @@ export function sanitizeTender(raw: WalmartTender): SanitizedRow {
   const weight = parseWeight(raw.wgt);
   if (weight == null) reasons.push(`Missing or unparseable weight: "${raw.wgt}"`);
 
-  const equipmentType = mapEquipmentType(raw.mode ?? "");
+  const { equipmentType, exact: modeIsExact } = mapEquipmentType(raw.mode ?? "");
   if (!equipmentType) {
     reasons.push(
       `Unrecognized or ambiguous mode "${raw.mode}" — contact Walmart for temperature range.`
     );
   }
 
+  const cautions: string[] = [];
+  if (equipmentType && !modeIsExact) {
+    cautions.push(
+      `Mode "${raw.mode}" doesn't exactly match a known value — mapped to ${equipmentType} by keyword match. Should be checked.`
+    );
+  }
+
   const loadNumber = raw.load_no ?? "";
 
   if (reasons.length > 0) {
-    return { loadNumber, raw, status: "manual_review", reasons, shvLoad: null };
+    return { loadNumber, raw, status: "manual_review", reasons, cautions, shvLoad: null };
   }
 
   const shvLoad: ShvLoad = {
@@ -101,7 +117,7 @@ export function sanitizeTender(raw: WalmartTender): SanitizedRow {
     equipment_type: equipmentType as EquipmentType,
   };
 
-  return { loadNumber, raw, status: "ready", reasons: [], shvLoad };
+  return { loadNumber, raw, status: "ready", reasons: [], cautions, shvLoad };
 }
 
 export function sanitizeTenders(raws: WalmartTender[]): SanitizedRow[] {

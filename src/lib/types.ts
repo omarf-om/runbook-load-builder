@@ -51,6 +51,7 @@ export interface SanitizedRow {
   raw: WalmartTender;
   status: LoadStatus;
   reasons: string[];
+  cautions: string[]; // non-blocking warnings on an otherwise "ready" row (e.g. fuzzy mode match)
   shvLoad: ShvLoad | null; // null when status = manual_review
 }
 
