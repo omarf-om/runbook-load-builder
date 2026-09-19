@@ -93,7 +93,10 @@ export default function Home() {
         <ShvLogo className="logo" />
       </header>
 
-      <p className="subtitle">Walmart Freight Tenders → SHV TMS Load Builder</p>
+      <p className="subtitle">
+        Fetches open Walmart freight tenders, sanitizes them, and pushes the ready ones into the
+        SHV TMS.
+      </p>
 
       <RulesPanel />
 

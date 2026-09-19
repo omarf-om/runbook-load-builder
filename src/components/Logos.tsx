@@ -11,20 +11,6 @@ export function WalmartLogo({ className }: { className?: string }) {
       >
         Walmart
       </text>
-      <g transform="translate(148, 4)">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <rect
-            key={i}
-            x="-1.5"
-            y="-9"
-            width="3"
-            height="9"
-            rx="1.5"
-            fill="#ffc220"
-            transform={`rotate(${i * 60} 0 0)`}
-          />
-        ))}
-      </g>
     </svg>
   );
 }
