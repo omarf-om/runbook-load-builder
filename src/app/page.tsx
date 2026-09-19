@@ -5,6 +5,7 @@ import { WalmartLogo, ShvLogo } from "@/components/Logos";
 import { LoadsTable } from "@/components/LoadsTable";
 import { SummaryBanner } from "@/components/SummaryBanner";
 import { RulesPanel } from "@/components/RulesPanel";
+import { PushResultsPanel } from "@/components/PushResultsPanel";
 import { CANDIDATE_EMAIL } from "@/lib/config";
 import type { PushResultRow, SanitizedRow } from "@/lib/types";
 
@@ -130,12 +131,11 @@ export default function Home() {
         fetchedCount={rows.length}
         readyCount={readyRows.length}
         manualReviewCount={manualReviewRows.length}
-        pushSummary={pushSummary}
       />
 
-      {rows.length > 0 && (
-        <LoadsTable rows={rows} selected={selected} onToggle={toggleRow} results={results} />
-      )}
+      {rows.length > 0 && <LoadsTable rows={rows} selected={selected} onToggle={toggleRow} />}
+
+      {results && <PushResultsPanel results={results} rows={rows} summary={pushSummary} />}
     </div>
   );
 }
