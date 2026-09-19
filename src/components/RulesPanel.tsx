@@ -73,11 +73,6 @@ export function RulesPanel() {
             malformed date. These loads can&apos;t form a valid SHV payload, so they&apos;re
             flagged with a reason instead of being sent.
           </p>
-          <p className="rules-note">
-            <strong>Not implemented (per case instructions):</strong> the video&apos;s 45,000 lb
-            weight-limit exception is intentionally disregarded — all weights are sanitized and
-            pushed as-is, regardless of size.
-          </p>
         </div>
       )}
     </div>

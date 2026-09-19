@@ -44,6 +44,7 @@ export function LoadsTable({ rows, selected, onToggle, results }: Props) {
             <th>Equipment</th>
             <th>Status</th>
             <th>Detail</th>
+            <th>Payload</th>
           </tr>
         </thead>
         <tbody>
@@ -90,6 +91,16 @@ export function LoadsTable({ rows, selected, onToggle, results }: Props) {
                   <StatusBadge row={row} result={result} />
                 </td>
                 <td className="detail-cell">{detail}</td>
+                <td>
+                  {row.shvLoad ? (
+                    <details className="payload-dropdown">
+                      <summary>View payload</summary>
+                      <pre>{JSON.stringify(row.shvLoad, null, 2)}</pre>
+                    </details>
+                  ) : (
+                    "—"
+                  )}
+                </td>
               </tr>
             );
           })}

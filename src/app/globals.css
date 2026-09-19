@@ -198,6 +198,26 @@ tr.row-review {
   color: #5a6472;
 }
 
+.payload-dropdown summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.payload-dropdown pre {
+  white-space: pre;
+  background: #f7f8fa;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 11px;
+  margin-top: 6px;
+  max-width: 320px;
+  overflow-x: auto;
+}
+
 .raw-sub {
   font-size: 11px;
   color: #9aa2ad;
